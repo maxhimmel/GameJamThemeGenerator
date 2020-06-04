@@ -1,0 +1,8 @@
+.overlay-disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.text-capitalize {
+    text-transform: capitalize;
+}
