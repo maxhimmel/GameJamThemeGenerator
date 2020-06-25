@@ -24,6 +24,7 @@ export class VotingWidget
         gameJamState.OnThemesGeneratedEvent.Subscribe( this.OnThemesGenerated );
         gameJamState.OnRoundEndedEvent.Subscribe( this.UpdateThemes );
         gameJamState.OnThemeReplacedEvent.Subscribe( this.UpdateThemes );
+        gameJamState.OnWinnerDeclaredEvent.Subscribe( this.OnWinnerDeclared );
 
         gameJamState.OnPooledThemeContextOpenedEvent.Subscribe( this.Deactivate );
         gameJamState.OnPooledThemeContextClosedEvent.Subscribe( this.Activate );
@@ -59,6 +60,11 @@ export class VotingWidget
 
         this.progressBar.setAttribute( "aria-valuenow", roundProgress.toString() );
         this.progressBar.style.width = roundProgress.toString() + "%";
+    }
+
+    private OnWinnerDeclared = () =>
+    {
+        this.Hide();
     }
 
     private Deactivate = () =>

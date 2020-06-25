@@ -20,8 +20,9 @@ export class PooledThemesWidget
         this.contextMenu.Hide();
 
         gameJamState.OnThemesGeneratedEvent.Subscribe( this.OnThemesGenerated );
-        gameJamState.OnRoundEndedEvent.Subscribe( this.OnRoundEnded );
         gameJamState.OnThemeReplacedEvent.Subscribe( this.OnThemeReplaced );
+        gameJamState.OnRoundEndedEvent.Subscribe( this.OnRoundEnded );
+        gameJamState.OnWinnerDeclaredEvent.Subscribe( this.OnWinnerDecalred );
 
         gameJamState.OnPooledThemeContextClosedEvent.Subscribe( this.OnContextMenuClosed );
     }
@@ -74,23 +75,6 @@ export class PooledThemesWidget
         this.layoutContainer.parentElement?.classList.add( "d-none");
     }
 
-    private OnRoundEnded = ( endedRound: TourneyRound ) =>
-    {
-        for ( var idx: number = 0; idx < endedRound.LoserIds.length; ++idx )
-        {
-            const loserId: number = endedRound.LoserIds[idx];
-            const loserButton: PooledThemeButton = this.pooledThemeButtons[loserId];
-
-            loserButton.Disable();
-            loserButton.MarkAsLoser();
-        }
-
-        const winnerId: number = endedRound.WinnerId;
-        const winnerButton: PooledThemeButton = this.pooledThemeButtons[winnerId];
-
-        winnerButton.Disable();
-    }
-
     private UpdatePooledThemeButtons = () =>
     {
         for ( var idx: number = 0; idx < gameJamState.GeneratedThemes.length; ++idx )
@@ -120,6 +104,32 @@ export class PooledThemesWidget
                 break;
             }
         }
+    }
+
+    private OnRoundEnded = ( endedRound: TourneyRound ) =>
+    {
+        for ( var idx: number = 0; idx < endedRound.LoserIds.length; ++idx )
+        {
+            const loserId: number = endedRound.LoserIds[idx];
+            const loserButton: PooledThemeButton = this.pooledThemeButtons[loserId];
+
+            loserButton.Disable();
+            loserButton.MarkAsLoser();
+        }
+
+        const winnerId: number = endedRound.WinnerId;
+        const winnerButton: PooledThemeButton = this.pooledThemeButtons[winnerId];
+
+        winnerButton.Disable();
+    }
+
+    private OnWinnerDecalred = ( winningTheme: ThemeDatum ) =>
+    {
+        const winnerId: number = winningTheme.Id;
+        const winnerButton: PooledThemeButton = this.pooledThemeButtons[winnerId];
+
+        winnerButton.Disable();
+        winnerButton.MarkAsWinner();
     }
 
     private OnContextMenuClosed = () =>

@@ -58,4 +58,10 @@ export class PooledThemeButton
         this.button.classList.remove( "btn-outline-secondary" );
         this.button.classList.add( "btn-outline-danger" );
     }
+
+    public MarkAsWinner()
+    {
+        this.button.classList.remove( "btn-outline-secondary" );
+        this.button.classList.add( "btn-outline-primary" );
+    }
 }

@@ -18,7 +18,7 @@ class GameJamState
     public get OnRoundEndedEvent(): IEvent<TourneyRound> { return this.onRoundEndedEvent.AsEvent; }
     private onRoundEndedEvent: Action<TourneyRound> = new Action<TourneyRound>();
 
-    public get OnWinnerDecalredEvent(): IEvent<ThemeDatum> { return this.onWinnerDecalredEvent.AsEvent; }
+    public get OnWinnerDeclaredEvent(): IEvent<ThemeDatum> { return this.onWinnerDecalredEvent.AsEvent; }
     private onWinnerDecalredEvent: Action<ThemeDatum> = new Action<ThemeDatum>();
 
     public get OnThemeReplacedEvent(): IEvent<ThemeDatum> { return this.onThemeReplacedEvent.AsEvent; }
