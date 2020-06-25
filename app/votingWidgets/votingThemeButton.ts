@@ -1,32 +1,30 @@
 import { ThemeDatum } from "../themeDatum";
+import { gameJamState } from "../appState/gameJamState";
+import { TourneyRound } from "../appState/tournament/tourneyRound";
 
 export class VotingThemeButton
 {
     private button: HTMLButtonElement;
-    private themeData: ThemeDatum;
+    private theme: ThemeDatum = ThemeDatum.Empty;
 
     public constructor( button: HTMLButtonElement )
     {
         this.button = button;
-        button.addEventListener( "click", ( event: MouseEvent ) =>
+        button.addEventListener( "click", this.OnClicked );
+    }
+
+    private OnClicked = ( event: MouseEvent ) =>
+    {
+        const currentRound: TourneyRound | undefined = gameJamState.GetCurrentRound();
+        if ( currentRound )
         {
-            console.log( this.themeData );
-        } );
+            gameJamState.SetWinner( currentRound.RoundId, this.theme );
+        }
     }
 
-    private OnClicked( event: MouseEvent )
+    public SetTheme( theme: ThemeDatum )
     {
-        console.log( this.themeData );
-    }
-
-    public GetThemeData(): ThemeDatum
-    {
-        return this.themeData;
-    }
-
-    public SetTheme( themeData: ThemeDatum )
-    {
-        this.themeData = themeData;
-        this.button.innerText = themeData.GetThemeName();
+        this.theme = theme;
+        this.button.innerText = theme.ThemeName;
     }
 }

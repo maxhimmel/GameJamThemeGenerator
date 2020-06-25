@@ -1,14 +1,18 @@
 export class ThemeDatum
 {
-    private themeName: string = "Theme";
+    public static readonly Empty: ThemeDatum = new ThemeDatum( -1, "Empty" );
 
-    public constructor( themeName: string )
+    public readonly Id: number = -1;
+    public readonly ThemeName: string = "Theme";
+
+    public constructor( id: number, themeName: string )
     {
-        this.themeName = themeName;
+        this.Id = id;
+        this.ThemeName = themeName;
     }
 
-    public GetThemeName(): string
+    public toString(): string
     {
-        return this.themeName;
+        return "ThemeDatum (" + this.Id + " | " + this.ThemeName + ")";
     }
 }

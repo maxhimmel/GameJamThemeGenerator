@@ -1,51 +1,107 @@
 import { Action } from "../utility/actions";
 import { IEvent } from "../utility/actions";
+import { gameJamState } from "../appState/gameJamState";
+import { ThemeDatum } from "../themeDatum";
 
 export class PooledThemesContextMenu
 {
-    public get OnOptionSelectedEvent(): IEvent<string> { return this.onOptionSelectedEvent.AsEvent; }
-    private onOptionSelectedEvent: Action<string> = new Action<string>();
-
     private menuContainer: HTMLDivElement;
-    private selectedThemeElement: HTMLParagraphElement;
+    private selectedThemeLabel: HTMLParagraphElement;
+    private selectedTheme: ThemeDatum = ThemeDatum.Empty;
 
     public constructor()
     {
         this.menuContainer = <HTMLDivElement>document.getElementById( "themePoolContext" );
-        this.selectedThemeElement = <HTMLParagraphElement>document.getElementById( "selectedTheme" );
+        this.selectedThemeLabel = <HTMLParagraphElement>document.getElementById( "selectedTheme" );
 
         const contextOptions: HTMLCollection = this.menuContainer.getElementsByClassName( "list-group-item" );
-        
-        for ( var idx: number = 0; idx < contextOptions.length; ++idx )
+        this.AttachContextOptionEvents( contextOptions );
+    }
+
+    private AttachContextOptionEvents( optionElements: HTMLCollection )
+    {
+        for ( var idx: number = 0; idx < optionElements.length; ++idx )
         {
-            const optionElement: Element = contextOptions[idx];
+            const optionElement: Element = optionElements[idx];
             const optionRef: string | null = optionElement.getAttribute( "href" );
 
-            optionElement.addEventListener( "click", ( event: Event ) =>
+            switch ( optionRef )
             {
-                console.log( optionRef );
-                this.Hide();
-
-                if ( optionRef )
-                {
-                    this.onOptionSelectedEvent.Invoke( optionRef );
-                }
-            } );
+                default:
+                case "#cancel":
+                    optionElement.addEventListener( "click", this.OnCanceled );
+                    break;
+                
+                case "#reroll":
+                    optionElement.addEventListener( "click", this.OnRerolled );
+                    break;
+                
+                case "#rename":
+                    optionElement.addEventListener( "click", this.OnRenamed );
+                    break;
+                
+                case "#delete":
+                    optionElement.addEventListener( "click", this.OnDeleted );
+                    break;
+            }
         }
     }
 
-    public SetLabel( label: string )
+    private OnCanceled = ( event: Event ) =>
     {
-        this.selectedThemeElement.innerText = label;
+        this.LogSelectedContext( event );
+
+        this.Hide();
     }
 
-    public Show()
+    private OnRerolled = ( event: Event ) =>
     {
-        this.menuContainer.classList.remove( "d-none" );
+        gameJamState.ReplaceTheme( this.selectedTheme );
+
+        this.Hide();
+    }
+
+    private OnRenamed = ( event: Event ) =>
+    {
+        this.LogSelectedContext( event );
+
+        this.Hide();
+    }
+
+    private OnDeleted = ( event: Event ) =>
+    {
+        gameJamState.DeleteTheme( this.selectedTheme );
+
+        this.Hide();
     }
 
     public Hide()
     {
+        gameJamState.OnPooledThemeContextClosedEvent.Invoke();
+
+        this.selectedTheme = ThemeDatum.Empty;
         this.menuContainer.classList.add( "d-none" );
+    }
+
+    public Show()
+    {
+        gameJamState.OnPooledThemeContextOpenedEvent.Invoke();
+
+        this.menuContainer.classList.remove( "d-none" );
+    }
+
+    public SetTheme( theme: ThemeDatum )
+    {
+        this.selectedTheme = theme;
+        this.selectedThemeLabel.innerText = theme.ThemeName;
+    }
+
+
+    private LogSelectedContext( event: Event )
+    {
+        const element: HTMLElement = event.target as HTMLElement;
+        const optionRef: string | null = element?.getAttribute( "href" );
+
+        console.log( optionRef );
     }
 }

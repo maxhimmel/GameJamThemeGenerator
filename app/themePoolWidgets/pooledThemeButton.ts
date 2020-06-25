@@ -1,50 +1,61 @@
 import { ThemeDatum } from "../themeDatum";
+import { Action } from "../utility/actions";
+import { gameJamState } from "../appState/gameJamState";
 
 export class PooledThemeButton
 {
+    public get Theme(): ThemeDatum { return this.theme; }
+
+    public get OnClickedEvent() { return this.onClickedEvent.AsEvent; }
+    private onClickedEvent: Action<PooledThemeButton> = new Action<PooledThemeButton>();
+
     private buttonGroup: HTMLDivElement;
     private button: HTMLButtonElement;
-    private themeData: ThemeDatum;
+    private theme: ThemeDatum = ThemeDatum.Empty;
 
-    public static CreatePooledThemeButton( themeData: ThemeDatum, onClickedCallback?: (clickEvent: MouseEvent) => void ): PooledThemeButton
+    public constructor()
     {
-        const newThemeButton: PooledThemeButton = new PooledThemeButton();
+        this.button = document.createElement( "button" );
+        this.button.setAttribute( "type", "button" );
+        this.button.classList.add( "btn", "btn-outline-secondary", "py-3", "text-capitalize" );
 
-        const buttonElement: HTMLButtonElement = document.createElement( "button" );
-        buttonElement.setAttribute( "type", "button" );
-        buttonElement.classList.add( "btn", "btn-outline-secondary", "py-3", "text-capitalize" );
-        buttonElement.innerText = themeData.GetThemeName();
+        this.button.addEventListener( "click", this.OnPooledThemeButtonClicked );
 
-        buttonElement.addEventListener( "click", ( event: MouseEvent ) => //newThemeButton.OnPooledThemeButtonClicked );
-        {
-            console.log( newThemeButton.themeData );
-
-            if ( onClickedCallback )
-            {
-                onClickedCallback( event );
-            }
-        } );
-
-        const buttonGroup: HTMLDivElement = document.createElement( "div" );
-        buttonGroup.setAttribute( "role", "group" );
-        buttonGroup.classList.add( "btn-group", "p-2" );
-        buttonGroup.appendChild( buttonElement );
-
-        newThemeButton.themeData = themeData;
-        newThemeButton.button = buttonElement;
-        newThemeButton.buttonGroup = buttonGroup;
-        return newThemeButton;
+        this.buttonGroup = document.createElement( "div" );
+        this.buttonGroup.setAttribute( "role", "group" );
+        this.buttonGroup.classList.add( "btn-group", "p-2" );
+        this.buttonGroup.appendChild( this.button );
     }
 
-    private OnPooledThemeButtonClicked( event: MouseEvent )
+    private OnPooledThemeButtonClicked = ( event: MouseEvent ) =>
     {
-        console.log( this );
-        console.log( this.button.innerText );
-        console.log( this.themeData );
+        this.onClickedEvent.Invoke( this );
+    }
+
+    public SetTheme( theme: ThemeDatum )
+    {
+        this.theme = theme;
+        this.button.innerText = theme.ThemeName;
     }
 
     public SetParent( parentElement: HTMLElement )
     {
         parentElement.appendChild( this.buttonGroup );
+    }
+
+    public RemoveElement()
+    {
+        this.buttonGroup.remove();
+    }
+
+    public Disable()
+    {
+        this.button.setAttribute( "disabled", "true" );
+    }
+
+    public MarkAsLoser()
+    {
+        this.button.classList.remove( "btn-outline-secondary" );
+        this.button.classList.add( "btn-outline-danger" );
     }
 }
