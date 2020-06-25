@@ -4,6 +4,7 @@ import { configSettings as CONFIG_SETTINGS } from "../assets/configSettings.json
 import { VotingWidget } from "../app/votingWidgets/votingWidget";
 import { PooledThemesWidget } from "../app/themePoolWidgets/pooledThemesWidget";
 import { ConfigSettingsWidget } from "./configSettingsWidgets/configSettingsWidget";
+import { WinWidget } from "./winWidget/winWidget";
 
 /* --- */
 
@@ -15,5 +16,8 @@ votingWidget.Hide();
 
 const pooledThemesWidget: PooledThemesWidget = new PooledThemesWidget();
 pooledThemesWidget.Hide();
+
+const winWidget: WinWidget = new WinWidget();
+winWidget.Hide();
 
 /* --- */
