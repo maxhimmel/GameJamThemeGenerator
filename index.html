@@ -6,14 +6,17 @@
 
 	<title>Game Jam Theme Generator</title>
 
+    <!--Bootstrap-->
     <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
-
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="node_modules/popper.js/dist/umd/popper.js"></script>
     <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+    <!--Misc-->
     <script type="text/javascript" src="node_modules/@fortawesome/fontawesome-free/js/all.js"></script>
 
+    <!--Game Jam Generator-->
     <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
 </head>
 <body>
@@ -36,6 +39,29 @@
             </div>
         </div>
     </nav>
+    
+    <div class="container-fluid pt-5 text-center" style="background-color: #e9ecef;" id="settingsContainer">
+        <h1 class="display-4">Let's get started</h1>
+
+        <div class="row row-cols-1">   
+            <div class="col py-5">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons" id="entryOptionsLayout">
+
+                    <label class="btn btn-success disabled" disabled>
+                        Entries
+                        <input type="radio"> <!--jQuery throws an error is this doesn't have an input tag-->
+                    </label>
+                    <!-- Our app will propagate these with buttons -->                        
+                </div>
+            </div>
+
+            <div style="height: 15vh !important;">
+                <button type="submit" class="btn-dark w-100 h-100" id="confirmConfigSettingsButton">
+                    Start
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div class="jumbotron text-center" id="votingContainer">
         <h1 class="display-4">Cast your vote!</h1>
@@ -49,7 +75,7 @@
                         <i class="far fa-hand-point-right fa-2x"></i>
                     </div>
                     <div class="col col">
-                        <button type="button" class="btn btn-warning btn-lg py-3 h-100 w-100 text-capitalize" id="leftVotingTheme">
+                        <button type="button" class="btn btn-warning btn-lg py-3 h-100 w-100 text-capitalize">
                             Here's a theme
                         </button>
                     </div>
@@ -61,7 +87,7 @@
 
                 <div class="col col-4 row">
                     <div class="col col">
-                        <button type="button" class="btn btn-warning btn-lg py-3 h-100 w-100 text-capitalize" id="rightVotingTheme">
+                        <button type="button" class="btn btn-warning btn-lg py-3 h-100 w-100 text-capitalize">
                             Then another theme! ... But what if it's too long and it goes on forever?!
                         </button>
                     </div>
@@ -75,7 +101,7 @@
         </div>
         
         <div class="progress bg-secondary">
-            <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" name="voting-progress" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" id="votingProgress" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
     </div>
 
