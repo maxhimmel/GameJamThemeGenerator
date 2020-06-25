@@ -7,15 +7,17 @@ export class WinWidget
 {
     private menuContainer: HTMLDivElement;
     private winMessage: HTMLHeadElement;
-    private themeElement: HTMLElement;
+    private themeElement: HTMLButtonElement;
 
     public constructor()
     {
         this.menuContainer = document.getElementById( "winContainer" ) as HTMLDivElement;
         this.winMessage = document.getElementById( "winMessage" ) as HTMLHeadElement;
-        this.themeElement = document.getElementById( "winningTheme" ) as HTMLElement;
+        this.themeElement = document.getElementById( "winningTheme" ) as HTMLButtonElement;
 
         gameJamState.OnWinnerDeclaredEvent.Subscribe( this.OnWinnerDeclared );
+
+        this.themeElement.addEventListener( "click", this.OnWinningThemeClicked );
     }
 
     private OnWinnerDeclared = ( winningTheme: ThemeDatum ) =>
@@ -42,6 +44,18 @@ export class WinWidget
     private SetWinningMessage( message: string )
     {
         this.winMessage.innerText = message;
+    }
+
+    private OnWinningThemeClicked = ( event: MouseEvent ) =>
+    {
+        this.themeElement.classList.add( "bounce" );
+        this.themeElement.addEventListener( "animationend", this.OnBounceAnimEnd );
+    }
+
+    private OnBounceAnimEnd = ( animeEvent: AnimationEvent ) =>
+    {
+        this.themeElement.classList.remove( "bounce" );
+        this.themeElement.removeEventListener( "animationend", this.OnBounceAnimEnd );
     }
 
     public Hide()
