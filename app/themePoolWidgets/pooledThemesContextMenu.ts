@@ -3,6 +3,8 @@ import { IEvent } from "../utility/actions";
 import { gameJamState } from "../appState/gameJamState";
 import { ThemeDatum } from "../themeDatum";
 
+type PanelOption = "#cancel" | "#reroll" | "#rename" | "#delete"
+
 export class PooledThemesContextMenu
 {
     private menuContainer: HTMLDivElement;
@@ -23,7 +25,8 @@ export class PooledThemesContextMenu
         for ( var idx: number = 0; idx < optionElements.length; ++idx )
         {
             const optionElement: Element = optionElements[idx];
-            const optionRef: string | null = optionElement.getAttribute( "href" );
+            const optionRef: PanelOption | null = optionElement.getAttribute( "href" ) as PanelOption;
+            this.DisplayContextOnHover(optionElement, optionRef);
 
             switch ( optionRef )
             {
@@ -103,5 +106,26 @@ export class PooledThemesContextMenu
         const optionRef: string | null = element?.getAttribute( "href" );
 
         console.log( optionRef );
+    }
+
+    private DisplayContextOnHover = ( optionElement: Element, optionRef: PanelOption = '#cancel' ) => {        
+        const optionContext = this.menuContainer.querySelector(`[role="tabpanel"]${optionRef}`);
+        optionElement.addEventListener( "mouseover", show );
+        optionElement.addEventListener( "mouseout", hide );
+
+        // TODO: break these out into a more reusable area like a util or create an OptionTab class that would manage all this
+        function show() {
+            optionContext?.classList.add( "show" );
+            optionElement.classList.add( "show" );
+            optionContext?.classList.add( "active" );
+            optionElement.classList.add( "active" );
+        }
+
+        function hide() {
+            optionContext?.classList.remove( "show" );
+            optionElement.classList.remove( "show" );
+            optionContext?.classList.remove( "active" );
+            optionElement.classList.remove( "active" );
+        }
     }
 }
