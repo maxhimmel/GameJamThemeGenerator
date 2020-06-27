@@ -12,7 +12,6 @@
     animation-name: bounce;
     animation-timing-function: ease;
 }
-
 @keyframes bounce {
     0%   { transform: scale(1,1)      translateY(0); }
     10%  { transform: scale(1.1,.9)   translateY(0); }
@@ -22,3 +21,35 @@
     68%  { transform: scale(1,1)      translateY(0); }
     100% { transform: scale(1,1)      translateY(0); }
 }
+
+.finger-bounce-left
+{
+    animation: finger-bounce-left 0.5s; 
+    animation-direction: alternate; 
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
+}         
+@keyframes finger-bounce-left { 
+    from { 
+        transform: translate3d(0, 0, 0); 
+    } 
+    to { 
+        transform: translate3d(-15px, 0, 0); 
+    } 
+} 
+
+.finger-bounce-right
+{
+    animation: finger-bounce-right 0.5s; 
+    animation-direction: alternate; 
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
+}         
+@keyframes finger-bounce-right { 
+    from { 
+        transform: translate3d(0, 0, 0); 
+    } 
+    to { 
+        transform: translate3d(15px, 0, 0); 
+    } 
+} 

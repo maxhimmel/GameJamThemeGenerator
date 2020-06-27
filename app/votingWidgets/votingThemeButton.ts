@@ -11,6 +11,8 @@ export class VotingThemeButton
     {
         this.button = button;
         button.addEventListener( "click", this.OnClicked );
+
+        this.AttachFingerAnims();
     }
 
     private OnClicked = ( event: MouseEvent ) =>
@@ -19,6 +21,30 @@ export class VotingThemeButton
         if ( currentRound )
         {
             gameJamState.SetWinner( currentRound.RoundId, this.theme );
+        }
+    }
+
+    private AttachFingerAnims()
+    {
+        const parent: HTMLElement | null = this.button.parentElement;
+        if ( !parent ) { return; }
+
+        const nextSibling: Element | null = parent.nextElementSibling;
+        const prevSibling: Element | null = parent.previousElementSibling;
+
+        const fingerAnimElement: Element | null = nextSibling ?? prevSibling;
+        if ( fingerAnimElement )
+        {
+            const animClass: string = prevSibling ? "finger-bounce-left" : "finger-bounce-right";
+
+            this.button.addEventListener( "mouseenter", () =>
+            {
+                fingerAnimElement.classList.add( animClass );
+            } );
+            this.button.addEventListener( "mouseleave", () =>
+            {
+                fingerAnimElement.classList.remove( animClass );
+            } );
         }
     }
 
